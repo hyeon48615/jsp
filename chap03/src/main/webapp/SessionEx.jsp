@@ -24,5 +24,8 @@ session.setAttribute("email", "user0@www.net");
 %>
 <h2>페이지 이동 후 session 영역 조회</h2>
 <a href="Session1.jsp">페이지 이동</a>
+
+
+
 </body>
 </html>

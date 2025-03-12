@@ -1,6 +1,6 @@
-<%@ page import="net.fullstack10.common.Person"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page trimDirectiveWhitespaces="true" %>
+<%@ page import="net.fullstack10.common.Person" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -19,8 +19,10 @@ Object person = pageContext.getAttribute("person");
 
 <ul>
 	<li>Integer 객체 : <%=(no == null ? "값 없음" : no) %></li>
-	<li>String 객체 : <%=(no == null ? "값 없음" : str) %></li>
-	<li>Person 객체 : (person == null ? "값 없음" : ((Person)person).getName())</li>
+	<li>String 객체 : <%=(str == null ? "값 없음" : str) %></li>
+	<li>Person 객체 : <%=(person == null ? "값 없음" : ((Person)person).getName()) %></li>
 </ul>
+
+
 </body>
 </html>

@@ -1,4 +1,4 @@
-<%@ page import="net.fullstack10.common.Person"%>
+<%@page import="net.fullstack10.common.Person"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page trimDirectiveWhitespaces="true" %>
 <!DOCTYPE html>
@@ -16,19 +16,20 @@
 Person person = (Person)(request.getAttribute("person"));
 %>
 <ul>
-	<li>페이지 영역 변수 : <%=pageContext.getAttribute("page") %>
-	<li>문자열 : <%=request.getAttribute("str") %>
-	<li>숫자 : <%=request.getAttribute("no") %>
-	<li>이름 : <%=person.getName() %></li>
-	<li>나이 : <%=person.getAge() %></li>
-	<li>성별 : <%=person.getSex() %></li>
+	<li>pageStr : <%=pageContext.getAttribute("pageStr") %> </li>
+	<li>문자열 : <%=request.getAttribute("str") %> </li>
+	<li>숫자 : <%=request.getAttribute("no") %> </li>
+	<li>이름 : <%=person.getName() %> </li>
+	<li>나이 : <%=person.getAge() %> </li>
+	<li>성별 : <%=person.getSex() %> </li>
 </ul>
 
-<h3>QuerryString 으로 받은 변수</h3>
+<h3>QueryString 으로 받은 변수</h3>
 <%
-request.setCharacterEncoding("UTF-8");
 out.print(request.getParameter("eng")+"<br>");
 out.print(request.getParameter("kor")+"<br>");
 %>
+
+
 </body>
 </html>
