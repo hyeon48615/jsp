@@ -29,5 +29,8 @@ Person person = (Person)(pageContext.getAttribute("person"));
 
 <hr>include 된 파일에서 page 영역 정보 조회</h2>
 <%@ include file="IncPage.jsp" %>
+
+<h2>페이지 이동 후 page 영역 조회</h2>
+<a href="PageLink.jsp">PageLink.jsp 바로가기</a>
 </body>
 </html>
