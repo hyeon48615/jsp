@@ -20,7 +20,7 @@ String savedId = cUtil.getCookieInfo(request, "saved_id");
 <div id="container">
 	<form name="frmLogin" id="frmLogin" action="LoginOk.jsp" method="post">
 		아이디 : <input type="text" name="user_id" id="user_id"
-		 value="<%=(saveIdFlag.equals("Y") ? savedId : "") %>" />
+		 value="<%=savedId %>" />
 		<input type="checkbox" name="save_id_flag" id="save_id_flag" value="Y" <%=(saveIdFlag != null && saveIdFlag.equals("Y") ? "checked" : "") %> />
 		아이디 저장하기
 		<br>

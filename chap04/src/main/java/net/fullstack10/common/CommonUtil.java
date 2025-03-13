@@ -6,25 +6,27 @@ import jakarta.servlet.http.HttpServletResponse;
 
 public class CommonUtil {
 	public void makeCookie(HttpServletResponse res
-			, String name, String value, String domain, String path, int exp) {
-		Cookie cookie = new Cookie(name, value);
-		if (domain != null) {
+			, String domain, String path, int exp
+			, String cName, String cValue) {
+
+		// 쿠키 생성
+		Cookie cookie = new Cookie(cName, cValue);
+		if ( domain != null ){
 			cookie.setDomain(domain);
 		}
-		if (path != null) {
+		if ( path != null ){
 			cookie.setPath(path);
 		}
 		cookie.setMaxAge(exp);
 		res.addCookie(cookie);
 	}
 	
-	public String getCookieInfo(HttpServletRequest req, String name) {
+	public String getCookieInfo(HttpServletRequest req, String cName) {
 		String rtnValue = "";
-		
 		Cookie[] cookies = req.getCookies();
-		if (cookies != null) {
-			for(Cookie c : cookies) {
-				if (name.equals(c.getName())) {
+		if ( cookies != null ) {
+			for (Cookie c : cookies){
+				if ( cName.equals(c.getName()) ) {
 					rtnValue = c.getValue();
 					break;
 				}
@@ -32,4 +34,5 @@ public class CommonUtil {
 		}
 		return rtnValue;
 	}
+
 }

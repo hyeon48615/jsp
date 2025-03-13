@@ -50,7 +50,7 @@ if ( popup_flag != null && popup_flag.equals("Y") ) {
 	out.println("쿠키 : 창 열기 설정");
 	out.println("<script>console.log('쿠키 창 열기 설정 : "+ popup_flag +"')");
 
-	cUtil.makeCookie(response, "", "/", 0, "popup_close", "");
+//	cUtil.makeCookie(response, "", "/", 0, "popup_close", "");
 
 }
 
