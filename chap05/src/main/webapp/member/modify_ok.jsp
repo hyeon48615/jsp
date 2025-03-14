@@ -33,44 +33,32 @@ if (name == null || name.length() < 2 || name.length() > 10) {
 %>
 
 <%
-// 1. JDBC 객체 생성
 JDBConnect jdbc = new JDBConnect();
 
-// 2. 쿼리 구문 작성
-String sql = "INSERT INTO tbl_member(memberId, pwd, name) values (?, ?, ?)";
+String sql = "UPDATE tbl_member SET";
+sql += " pwd = ?, name = ?";
+sql += " WHERE memberId = ?";
 
-// 3. PreparedStatement 구문 생성 및 변수 할당
 PreparedStatement psmt = jdbc.conn.prepareStatement(sql);
-// jdbc.psmt = jdbc.conn.prepareStatement(sql);
-psmt.setString(1, memberId);
-psmt.setString(2, pwd);
-psmt.setString(3, name);
+psmt.setString(1, pwd);
+psmt.setString(2, name);
+psmt.setString(3, memberId);
 
-// 4. 쿼리 수행
-int rtnResult = psmt.executeUpdate();	// executeUpdate() -> insert, update, delete
-// out.print(rtnResult + " 행이 입력되었습니다.");	// 서버 동작이 끝난 후, 클라이언트에 출력
-// jdbc.close();								// response.sendRedirect()는 서버 동작으로 먼저 처리되어
-												// out.print()가 무시됨											
-// response.sendRedirect("list.jsp");
+int rtnResult = psmt.executeUpdate();
 
-/* jdbc.close();
+jdbc.close();
 
 if (rtnResult > 0) {
 	out.print("<script>");
-	out.print("alert('" + rtnResult + " 행이 입력되었습니다.');");
+	out.print("alert('" + memberId + " 회원 정보가 수정되었습니다.');");
 	out.print("window.location.replace('list.jsp');");
 	out.print("</script>");
 	out.close();
 } else {
 	out.print("<script>");
-	out.print("alert('회원 등록이 완료되지 않았습니다.');");
+	out.print("alert('회원 정보 수정이 완료되지 않았습니다.');");
 	out.print("history.back();");
 	out.print("</script>");
 	out.close();
-} */
-
-if (rtnResult > 0) {
-	request.getRequestDispatcher("regist_success.jsp").forward(request, response);	// URL 변경하지 않고, 화면만 이동. 즉, 제어권은 넘어가지 않음
-	// response.sendRedirect("regist_success.jsp");									// 클라이언트에게 페이지 이동 요청. URL 변경. Status Code = 302
 }
 %>
