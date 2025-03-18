@@ -55,9 +55,21 @@
 CommonUtil cUtil = new CommonUtil();
 String save_id_flag = cUtil.getCookieInfo(request, "save_id_flag");
 String saved_id = cUtil.getCookieInfo(request, "saved_id");
-String auto_login_flag = cUtil.getCookieInfo(request, "auto_login_flag");
+// String auto_login_flag = cUtil.getCookieInfo(request, "auto_login_flag");
+String auto_login_session = cUtil.getCookieInfo(request, "auto_login_session");
 
-if (auto_login_flag != null && auto_login_flag.equals("Y")) {
+if (auto_login_session != null) {
+	MemberDAO dao = new MemberDAO();
+	MemberDTO dto = dao.getMemberInfoBySessionId(auto_login_session);
+	dao.close();
+	
+	if (dto != null && dto.getMemberId() != null) {
+		session.setAttribute("memberId", dto.getMemberId());
+		session.setAttribute("name", dto.getName());
+	}
+}
+
+/* if (auto_login_flag != null && auto_login_flag.equals("Y")) {
 	MemberDAO dao = new MemberDAO();
 	MemberDTO dto = dao.getMemberInfo(saved_id);
 	dao.close();
@@ -66,7 +78,7 @@ if (auto_login_flag != null && auto_login_flag.equals("Y")) {
 		session.setAttribute("memberId", dto.getMemberId());
 		session.setAttribute("name", dto.getName());
 	}
-}
+} */
 %>
 	<div id="container">
 		<form name="frmLogin" id="frmLogin" method="post">

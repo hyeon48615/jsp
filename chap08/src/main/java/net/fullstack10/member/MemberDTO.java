@@ -20,6 +20,7 @@ public class MemberDTO {
 	private LocalDateTime leaveDate;
 	private LocalDateTime pwdChangeDate;
 	private String sessionId;
+	private LocalDateTime sessionLimitDate;
 //	private int discountRate;
 //	private String discountGrade;
 	
@@ -124,5 +125,11 @@ public class MemberDTO {
 	}
 	public void setSessionId(String sessionId) {
 		this.sessionId = sessionId;
+	}
+	public LocalDateTime getSessionLimitDate() {
+		return sessionLimitDate;
+	}
+	public void setSessionLimitDate(LocalDateTime sessionLimitDate) {
+		this.sessionLimitDate = sessionLimitDate;
 	}
 }

@@ -1,3 +1,4 @@
+<%@page import="java.time.LocalDateTime"%>
 <%@page import="net.fullstack10.member.MemberDTO"%>
 <%@page import="net.fullstack10.member.MemberDAO"%>
 <%@page import="java.sql.ResultSet"%>
@@ -32,7 +33,6 @@ if (member_id == null || member_id.length() < 4 || member_id.length() > 20) {
 
 MemberDAO dao = new MemberDAO();
 MemberDTO dto = dao.getMemberInfo(member_id, pwd);
-dao.close();
 
 CommonUtil cUtil = new CommonUtil();
 
@@ -45,20 +45,20 @@ if (dto != null && dto.getMemberId() != null) {
 	
 	if (save_id_flag != null && save_id_flag.equals("Y")) {
 		cUtil.makeCookie(response, "", "/", 3600, "save_id_flag", save_id_flag);
+		cUtil.makeCookie(response, "", "/", 3600, "saved_id", member_id);
 	} else {
 		cUtil.makeCookie(response, "", "/", 0, "save_id_flag", "");
+		cUtil.makeCookie(response, "", "/", 0, "saved_id", "");
 	}
 	
 	if (auto_login_flag != null && auto_login_flag.equals("Y")) {
-		cUtil.makeCookie(response, "", "/", 3600, "auto_login_flag", auto_login_flag);
+		cUtil.makeCookie(response, "", "/", 3600, "auto_login_session", session.getId());
+		LocalDateTime expiredDate = LocalDateTime.now().plusSeconds(3600);
+		dao.saveAutoLogin(member_id, session.getId(), expiredDate);
+		// cUtil.makeCookie(response, "", "/", 3600, "auto_login_flag", auto_login_flag);
 	} else {
-		cUtil.makeCookie(response, "", "/", 0, "auto_login_flag", "");
-	}
-	
-	if (save_id_flag != null && save_id_flag.equals("Y") || auto_login_flag != null && auto_login_flag.equals("Y")) {
-		cUtil.makeCookie(response, "", "/", 3600, "saved_id", member_id);
-	} else {
-		cUtil.makeCookie(response, "", "/", 0, "saved_id", "");
+		cUtil.makeCookie(response, "", "/", 0, "auto_login_session", "");
+		// cUtil.makeCookie(response, "", "/", 0, "auto_login_flag", "");
 	}
 } else {
 	out.print("<script>");
@@ -67,5 +67,6 @@ if (dto != null && dto.getMemberId() != null) {
 	out.print("</script>");
 	out.close();
 }
+dao.close();
 response.sendRedirect("login.jsp");
 %>

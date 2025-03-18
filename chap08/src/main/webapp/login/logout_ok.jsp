@@ -9,9 +9,11 @@ session.removeAttribute("name");
 
 session.invalidate();
 
-// cUtil.makeCookie(response, "", "/", 0, "save_id_flag", "");
-// cUtil.makeCookie(response, "", "/", 0, "saved_id", "");
-cUtil.makeCookie(response, "", "/", 0, "auto_login_flag", "");
+// 로그아웃 시, 쿠키 내 모든 정보 삭제
+cUtil.makeCookie(response, "", "/", 0, "save_id_flag", "");
+cUtil.makeCookie(response, "", "/", 0, "saved_id", "");
+cUtil.makeCookie(response, "", "/", 0, "auto_login_session", "");
+// cUtil.makeCookie(response, "", "/", 0, "auto_login_flag", "");
 
 response.sendRedirect("login.jsp");
 %>
