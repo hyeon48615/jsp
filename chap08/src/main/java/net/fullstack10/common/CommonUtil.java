@@ -5,6 +5,18 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 public class CommonUtil {
+	public boolean isNumeric(String str) {
+		return str != null && !str.isEmpty() && !str.isBlank() && str.matches("[0-9]+");
+	}
+	
+	public int parseInt(String no) {
+		return (isNumeric(no) ? Integer.parseInt(no) : 0);
+	}
+	
+	public int parseInt(String no, int def) {
+		return (isNumeric(no) ? Integer.parseInt(no) : def);
+	}
+	
 	public void makeCookie(HttpServletResponse res
 			, String domain, String path, int exp
 			, String cName, String cValue) {

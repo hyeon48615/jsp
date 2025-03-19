@@ -68,5 +68,12 @@ if (dto != null && dto.getMemberId() != null) {
 	out.close();
 }
 dao.close();
-response.sendRedirect("login.jsp");
+
+Object redirectURL = session.getAttribute("redirectUrl");
+if (redirectURL != null) {
+	session.removeAttribute("redirectUrl");
+	response.sendRedirect(redirectURL.toString());
+} else {
+	response.sendRedirect("login.jsp");
+}
 %>

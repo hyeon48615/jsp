@@ -9,8 +9,13 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+<link href="../basic.css" rel="stylesheet" type="text/css">
 
 <style>
+	table {
+		width: 100%;
+	}
+	
 	table, thead, tbody, th, tr, td {
 		border: 1px solid black;
 		border-collapse: collapse;
@@ -29,13 +34,14 @@
 	}
 	
 	.input_box {
-		width: 300px;
-		height: 20px;
+		width: 400px;
+		height: 30px;
 		margin: 2px 0px 2px 4px;
 	}
 	
 	.input_box_id {
-		width: 200px;
+		width: 300px;
+		margin-right: 5px;
 	}
 	
 	.align_center {
@@ -46,7 +52,12 @@
 		height: 40px;
 	}
 	.login_btn {
+		position: relative;
 		height: 40px;
+	}
+	#auto_login_checkbox {
+		position: absolute;
+		left: 10px;
 	}
 </style>
 </head>
@@ -68,21 +79,11 @@ if (auto_login_session != null) {
 		session.setAttribute("name", dto.getName());
 	}
 }
-
-/* if (auto_login_flag != null && auto_login_flag.equals("Y")) {
-	MemberDAO dao = new MemberDAO();
-	MemberDTO dto = dao.getMemberInfo(saved_id);
-	dao.close();
-	
-	if (dto != null && dto.getMemberId() != null) {
-		session.setAttribute("memberId", dto.getMemberId());
-		session.setAttribute("name", dto.getName());
-	}
-} */
 %>
-	<div id="container">
+	<div class="container">
 		<form name="frmLogin" id="frmLogin" method="post">
 		<% if (session.getAttribute("memberId") == null) { %>
+			<h1>로그인</h1>
 			<table>
 				<tbody>
 					<tr>
@@ -100,7 +101,7 @@ if (auto_login_session != null) {
 					</tr>
 					<tr>
 						<td colspan="2" class="align_center login_btn">
-							<input type="checkbox" name="auto_login_flag" id="auto_login_flag" value="Y" /> 자동 로그인
+							<span id="auto_login_checkbox"><input type="checkbox" name="auto_login_flag" id="auto_login_flag" value="Y" /> 자동 로그인</span>
 							<input type="submit" id="btnLogin" value="로그인" /> 
 							<input type="button" id="btnCancel" value="취소" />
 						</td>
@@ -160,7 +161,7 @@ if (auto_login_session != null) {
 					<tr>
 						<td colspan="2" class="align_center login_btn">
 							<input type="submit" id="btnLogout" value="로그아웃" /> 
-							<input type="button" id="btnGotoMyPage" value="마이페이지" />
+							<input type="button" id="btnGotoMyPage"  value="마이페이지" />
 							<input type="button" id="btnGotoBbsList" value="게시판목록" />
 						</td>
 					</tr>
