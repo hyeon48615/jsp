@@ -1,0 +1,20 @@
+@charset "UTF-8";
+
+* {
+	margin: 0px;
+	padding: 0px;
+	box-sizing: border-box;
+}
+.container {
+	width: 60%;
+	min-width: 600px;
+	margin: 20px auto;
+}
+h1 {
+	margin-bottom: 20px;
+}
+input[type='button'], input[type='submit'] {
+	box-sizing: content-box;
+	margin: 0px 2px;
+	padding: 0px 4px;
+}
