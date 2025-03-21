@@ -18,4 +18,21 @@
   	<servlet-name>HelloServlet</servlet-name>
   	<url-pattern>/Test.do</url-pattern>
   </servlet-mapping>
+  
+  <context-param>
+  	<param-name>MariaDriver</param-name>
+  	<param-value>org.mariadb.jdbc.Driver</param-value>
+  </context-param>
+  <context-param>
+  	<param-name>MariaURL</param-name>
+  	<param-value>jdbc:mariadb://localhost:3306/fullstack10</param-value>
+  </context-param>
+  <context-param>
+  	<param-name>dbId</param-name>
+  	<param-value>root</param-value>
+  </context-param>
+  <context-param>
+  	<param-name>dbPwd</param-name>
+  	<param-value>1234</param-value>
+  </context-param>
 </web-app>
