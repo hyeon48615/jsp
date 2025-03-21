@@ -12,7 +12,7 @@ public class CommonDateUtil {
 	// LocalDate 타입 --> Date 타입으로 변환
 	
 	// LocalDateTime 타입 --> Date 타입으로 변환
-	public Date toDate(LocalDateTime date) {
+	public static Date toDate(LocalDateTime date) {
 		return date == null ? null :
 			Date.valueOf(date.toLocalDate());
 	}
@@ -20,7 +20,7 @@ public class CommonDateUtil {
 	// LocalDateTime 타입 --> DateTime 타입으로 변환
 	
 	// LocalDateTime 타입 --> TimeStamp 타입으로 변환
-	public Timestamp toTimestamp(LocalDateTime date) {
+	public static Timestamp toTimestamp(LocalDateTime date) {
 		return date == null ? null :
 			Timestamp.valueOf(date);
 	}
@@ -28,7 +28,7 @@ public class CommonDateUtil {
 	// Date 타입 --> LocalDate 타입으로 변환
 			
 	// Date 타입 --> LocalDateTime 으로 변환
-	public LocalDateTime toLocalDateTime(Date date) {
+	public static LocalDateTime toLocalDateTime(Date date) {
 		return date == null ? null :
 				Instant.ofEpochMilli(date.getTime()).atZone(ZoneId.systemDefault()).toLocalDateTime();
 	}

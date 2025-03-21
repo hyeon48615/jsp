@@ -98,8 +98,11 @@ public class CommonPageUtil {
 		this.setNextPageFlag();
 	}
 	
-	public String printPagination(String url) {
+	public String printPagination(String baseURL, String queryString) {
+		String url = getPagenationURL(baseURL, queryString);
+		
 		StringBuilder sb = new StringBuilder();
+			
 		if (this.pageNo != 1) {
 			sb.append("<a href='" + url + "page_no=1' class='btn-page'><<</a>");
 		}
@@ -110,7 +113,7 @@ public class CommonPageUtil {
 		}
 		for (int i = this.pageBlockStart; i <= this.pageBlockEnd; i++) {
 			if (i == this.pageNo) {
-				sb.append("<a href='' class='btn-cur-page'>" + i + "</a>");
+				sb.append("<span class='btn-cur-page'>" + i + "</span>");
 			} else {
 				sb.append("<a href='" + url + "page_no=" + i + "' class='btn-page'>" + i + "</a>");
 			}
@@ -124,5 +127,24 @@ public class CommonPageUtil {
 			sb.append("<a href='" + url + "page_no=" + this.totalPage + "' class='btn-page'>>></a>");
 		}
 		return sb.toString();
+	}
+	
+	private String getPagenationURL(String baseURL, String queryString) {
+		String url = baseURL + "?";
+		if (queryString != null && !queryString.isEmpty()) {
+			String[] urlParams = queryString.split("&");
+			StringBuilder sb = new StringBuilder();
+			
+			for (String param : urlParams) {
+				if (!param.startsWith("page_no=")) {
+					sb.append(param + "&");
+				}
+			}
+			
+			if (sb.length() > 0) {
+				url += sb.toString();
+			}
+		}
+		return url;
 	}
 }

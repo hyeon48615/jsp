@@ -8,11 +8,9 @@ import net.fullstack10.common.CommonDateUtil;
 import net.fullstack10.common.DBConnPool;
 
 public class BbsDAO extends DBConnPool {
-	private CommonDateUtil dateUtil;
 	
 	public BbsDAO() {
 		super();
-		dateUtil = new CommonDateUtil();
 	}
 	
 	/**
@@ -124,7 +122,7 @@ public class BbsDAO extends DBConnPool {
 				dto.setTitle(rs.getString("title"));
 				dto.setContent(rs.getString("content"));
 				dto.setUser_id(rs.getString("user_id"));
-				dto.setReg_date(dateUtil.toLocalDateTime(rs.getDate("reg_date")));
+				dto.setReg_date(CommonDateUtil.toLocalDateTime(rs.getDate("reg_date")));
 				dto.setRead_cnt(rs.getInt("read_cnt"));
 				dto.setFile_path(rs.getString("file_path"));
 				dto.setFile_name(rs.getString("file_name"));
@@ -171,7 +169,7 @@ public class BbsDAO extends DBConnPool {
 				dto.setTitle(rs.getString("title"));
 				dto.setContent(rs.getString("content"));
 				dto.setUser_id(rs.getString("user_id"));
-				dto.setReg_date(dateUtil.toLocalDateTime(rs.getDate("reg_date")));
+				dto.setReg_date(CommonDateUtil.toLocalDateTime(rs.getDate("reg_date")));
 				dto.setRead_cnt(rs.getInt("read_cnt"));
 				dto.setFile_path(rs.getString("file_path"));
 				dto.setFile_name(rs.getString("file_name"));
@@ -219,7 +217,7 @@ public class BbsDAO extends DBConnPool {
 				dto.setTitle(rs.getString("title"));
 				dto.setContent(rs.getString("content"));
 				dto.setUser_id(rs.getString("user_id"));
-				dto.setReg_date(dateUtil.toLocalDateTime(rs.getDate("reg_date")));
+				dto.setReg_date(CommonDateUtil.toLocalDateTime(rs.getDate("reg_date")));
 				dto.setRead_cnt(rs.getInt("read_cnt"));
 				dto.setFile_path(rs.getString("file_path"));
 				dto.setFile_name(rs.getString("file_name"));

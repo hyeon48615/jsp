@@ -1,3 +1,5 @@
+<%@page import="java.sql.Timestamp"%>
+<%@page import="net.fullstack10.common.CommonDateUtil"%>
 <%@page import="net.fullstack10.common.CommonPageUtil"%>
 <%@page import="java.time.format.DateTimeFormatter"%>
 <%@page import="net.fullstack10.common.CommonUtil"%>
@@ -8,6 +10,8 @@
 <%@page import="net.fullstack10.bbs.BbsDAO"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page trimDirectiveWhitespaces="true"%>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
+<%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -76,9 +80,6 @@ a {
 </style>
 </head>
 <body>
-	<div class="container">
-		<h1>게시판 목록</h1>
-
 <%
 CommonUtil cUtil = new CommonUtil();
 
@@ -106,13 +107,18 @@ param.put("page_skip_count", page_skip_count);
 param.put("page_size", page_size);
 
 total_count = dao.getBbsTotalCount(param);
-
 List<BbsDTO> bbsList = dao.getBbsList(param);
 
 // 페이지네이션 객체
 CommonPageUtil pUtil = new CommonPageUtil(page_no, page_size, total_count, page_block_size);
 %>
-		<p><b>전체 게시글 개수 : </b><%=total_count %></p>
+<c:set var="total_count" value="<%=dao.getBbsTotalCount(param) %>" />
+<c:set var="bbsList" value="<%=dao.getBbsList(param) %>" />
+<c:set var="pUtil" value="<%=pUtil %>" />
+
+	<div class="container">
+		<h1>게시판 목록</h1>
+		<p><b>전체 게시글 개수 : </b>${ total_count }</p>
 		<form name="frmSearch" id="frmSearch" method="get">
 			<select name="search_category" id="search_cateogory">
 				<option value="" selected>선택</option>
@@ -136,55 +142,34 @@ CommonPageUtil pUtil = new CommonPageUtil(page_no, page_size, total_count, page_
 				</tr>
 			</thead>
 			<tbody>
-<%
-if (!bbsList.isEmpty()) {
-	int no = (page_no-1) * page_size + 1;
-	for(BbsDTO dto : bbsList) {
-%>
-		
-				<tr>
-					<td class="text-align"><input type="checkbox" name="delete_idx" value="<%=dto.getIdx() %>" /></td>
-					<td class="text-align"><%=no++ %></td>
-					<td><a href="view.jsp?no=<%=dto.getIdx() %>"><%=dto.getTitle() %></a></td>
-					<td class="text-align"><%=dto.getRead_cnt() %></td>
-					<td class="text-align"><%=dto.getReg_date().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")) %></td>
-					<td class="text-align"><input type="button" class="btnDeleteRow" value="삭제" /></td>
-				</tr>
-<%
-	}
-} else {
-%>
+			<c:if test="${ not empty bbsList }">
+				<c:set var="bbs_no" value="<%=(page_no-1) * page_size %>" />
+				<c:forEach var="dto" items="${ bbsList }" varStatus="loopStatus">
+					<tr>
+						<td class="text-align"><input type="checkbox" name="delete_idx" value="${ dto.getIdx() }" /></td>
+						<td class="text-align">${ bbs_no + loopStatus.count }</td>
+						<td><a href="view.jsp?no=${ dto.getIdx() }">${ dto.getTitle() }</a></td>
+						<td class="text-align">${ dto.getRead_cnt() }</td>
+						<td class="text-align">
+							<fmt:parseDate var="pRegDate" value="${ dto.getReg_date() }" type="both" pattern="yyyy-MM-dd'T'HH:mm:ss" />
+							<fmt:formatDate value="${ pRegDate }" type="both" pattern="yyyy-MM-dd HH:mm:ss" />
+						</td>
+						<td class="text-align"><input type="button" class="btnDeleteRow" value="삭제" /></td>
+					</tr>
+				</c:forEach>
+			</c:if>
+			<c:if test="${ empty bbsList }">
 				<tr>
 					<td colspan="6" >등록된 게시물이 없습니다.</td>
 				</tr>
-<%
-}
-%>
+			</c:if>
+				
+
 				<tr>
 					<td colspan="6" class="text-align">
-					<% 
-						String url = request.getRequestURI() + "?";
-						String queryString = request.getQueryString();
-						
-						if (queryString != null) {
-							String[] urlParams = queryString.split("&");
-							StringBuilder sb = new StringBuilder();
-							
-							for (String p : urlParams) {
-								if (!p.startsWith("page_no=")) {
-									if (sb.length() > 0) {
-										sb.append("&");
-									}
-									sb.append(p);
-								}
-							}
-							
-							if (sb.length() > 0) {
-								url = url + sb.toString() + "&";
-							}
-						}
-					%>
-					<%=pUtil.printPagination(url) %>
+						<c:set var="baseURL" value="<%=request.getRequestURI() %>" />
+						<c:set var="queryString" value="<%=request.getQueryString() %>" />
+						${ pUtil.printPagination(baseURL, queryString) }
 					</td>
 				</tr>
 				<tr>
