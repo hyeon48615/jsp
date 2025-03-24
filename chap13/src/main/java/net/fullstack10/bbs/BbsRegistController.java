@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -12,8 +13,24 @@ import net.fullstack10.common.CommonFileUtil;
 
 /**
  * Servlet implementation class BbsRegistController
+ * 
+ * Web.xml 설정시,
+ * <servlet>
+ * 	<servlet-name>/bbs/BbsRegist.do</servlet-name>
+ * 	<servlet-class>net.fullstack10.bbs.event</servlet-class>
+ * 	<multipart-config>
+ * 		<location>/Uploads</location>
+ *		<max-file-size>1024000</max-file-size> <!-- 파일 1개당, -1L : 무제한 -->
+ * 		<max-request-size>10240000</max-request-size> <!-- request 당, 파일이 10개면 10개 합한 값 -->
+ * 		<file-size-threshold>0</file-size-threshold> <!-- 임시디렉토리에 저장할 기준값, 기본값 0 -->
+ * 	</multipart-config>
+ * </servlet>
  */
-@WebServlet("/BbsRegist.do")
+@WebServlet("/bbs/BbsRegist.do")
+@MultipartConfig(
+		maxFileSize = 1024*1024*1,
+		maxRequestSize = 1024*1024*10
+)
 public class BbsRegistController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
@@ -22,19 +39,23 @@ public class BbsRegistController extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		response.getWriter().append("Served at: ").append(request.getContextPath());
+		request.getRequestDispatcher("/WEB-INF/views/bbs/regist.jsp").forward(request, response);
 	}
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		request.setCharacterEncoding("UTF-8");
+		response.setCharacterEncoding("UTF-8");
+		
 		PrintWriter wrt = response.getWriter();
 		
 		CommonFileUtil fileUtil = new CommonFileUtil();
 		
 		// 파일 업로드 디렉토리 설정
-		String saveDir = getServletContext().getRealPath("/Uploads");
+		String saveDir = getServletContext().getRealPath("/Uploads"); // -> 이클립스의 경로 반환
+		saveDir = "D:\\JAVA10\\JSP\\jsp\\chap13\\src\\main\\webapp\\Uploads";
 		
 		// 파일 업로드
 		String orgFile = fileUtil.fileUpload(request, saveDir);
