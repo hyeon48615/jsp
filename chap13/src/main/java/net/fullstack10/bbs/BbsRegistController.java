@@ -46,27 +46,13 @@ public class BbsRegistController extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		response.setContentType("text/html;charset=UTF-8");
 		request.setCharacterEncoding("UTF-8");
 		response.setCharacterEncoding("UTF-8");
 		
 		PrintWriter wrt = response.getWriter();
 		
 		CommonFileUtil fileUtil = new CommonFileUtil();
-		
-		// 파일 업로드 디렉토리 설정
-		String saveDir = getServletContext().getRealPath("/Uploads"); // -> 이클립스의 경로 반환
-		saveDir = "D:\\JAVA10\\JSP\\jsp\\chap13\\src\\main\\webapp\\Uploads";
-		
-		// 파일 업로드
-		String orgFile = fileUtil.fileUpload(request, saveDir);
-		
-		// 저장된 파일명 -> 새로운 이름으로 변경
-		String newFile = "";
-		String fileExt = "";
-		if (orgFile != null && !orgFile.isEmpty()) {
-			newFile = fileUtil.fileRename(saveDir, orgFile);
-			fileExt = fileUtil.getFileInfo("FILE_EXT", newFile);
-		}
 		
 		// request 파라미터
 		String memberId = request.getParameter("member_id");
@@ -75,37 +61,40 @@ public class BbsRegistController extends HttpServlet {
 
 		// validation 체크 루틴
 		if (memberId == null || memberId.length() < 4 || memberId.length() > 20) {
-			if (newFile != null && !newFile.isEmpty()) {
-				fileUtil.fileDelete(request, saveDir, newFile);
-			}
-			
 			wrt.print("<script>");
 			wrt.print("alert('아이디를 4자리 이상 20자리 이하로 입력하세요.');");
 			wrt.print("history.back();");
 			wrt.print("</script>");
 			wrt.close();
 		}
-		if (title == null || title.length() < 2 || title.length() > 100) {
-			if (newFile != null && !newFile.isEmpty()) {
-				fileUtil.fileDelete(request, saveDir, newFile);
-			}
-			
+		if (title == null || title.length() < 1 || title.length() > 100) {
 			wrt.print("<script>");
 			wrt.print("alert('제목을 1자리 이상 100자리 이하로 입력하세요.');");
 			wrt.print("history.back();");
 			wrt.print("</script>");
 			wrt.close();
 		}
-		if (content == null || content.length() < 2 || content.length() > 1000) {
-			if (newFile != null && !newFile.isEmpty()) {
-				fileUtil.fileDelete(request, saveDir, newFile);
-			}
-			
+		if (content == null || content.length() < 1 || content.length() > 1000) {
 			wrt.print("<script>");
 			wrt.print("alert('글 내용을 1자리 이상 1000자리 이하로 입력하세요.');");
 			wrt.print("history.back();");
 			wrt.print("</script>");
 			wrt.close();
+		}
+		
+		// 파일 업로드 디렉토리 설정
+		String saveDir = getServletContext().getRealPath("/Uploads"); // -> 이클립스의 경로 반환
+		saveDir = "D:\\JAVA10\\JSP\\chap13\\src\\main\\webapp\\Uploads";
+			
+		// 파일 업로드
+		String orgFile = fileUtil.fileUpload(request, saveDir);
+
+		// 저장된 파일명 -> 새로운 이름으로 변경
+		String newFile = "";
+		String fileExt = "";
+		if (orgFile != null && !orgFile.isEmpty()) {
+			newFile = fileUtil.fileRename(saveDir, orgFile);
+			fileExt = fileUtil.getFileInfo("FILE_EXT", newFile);
 		}
 
 		// 게시물 내용 BbsDTO 객체에 할당
@@ -123,7 +112,7 @@ public class BbsRegistController extends HttpServlet {
 		BbsDAO dao = new BbsDAO();
 		int rtnResult = dao.setBbsRegist(dto);
 		dao.close();
-
+		
 		if ( rtnResult > 0 ) {
 			wrt.print("<script>");
 			wrt.print("alert('게시물이 등록되었습니다.');");

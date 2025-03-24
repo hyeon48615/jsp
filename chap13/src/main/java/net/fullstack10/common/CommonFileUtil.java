@@ -73,6 +73,7 @@ public class CommonFileUtil {
 	// 파일 삭제
 	public void fileDelete(HttpServletRequest req, String sDir, String fileName) {
 		String Dir = req.getServletContext().getRealPath(sDir);
+		Dir = "D:\\JAVA10\\JSP\\chap13\\src\\main\\webapp\\Uploads";
 		File file = new File(Dir + File.separator + fileName);
 		if (file.exists()) {
 			file.delete();
