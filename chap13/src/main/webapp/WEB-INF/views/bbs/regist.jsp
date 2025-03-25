@@ -54,7 +54,7 @@
 
 <h1>게시판 등록 페이지</h1>
 
-<form name="frmRegist" id="frmRegist" action="./BbsRegist.do" method="post" enctype="multipart/form-data">
+<form name="frmRegist" id="frmRegist" action="./regist.do" method="post" enctype="multipart/form-data">
 <table>
 <tbody>
 	<tr>
@@ -79,7 +79,7 @@
 	<tr>
 		<th>첨부파일 : </th>
 		<td class="input_col">
-			<input type="file" name="file1" />
+			<input type="file" name="file1" />	
 		</td> 
 	</tr>
 	<tr>
@@ -122,7 +122,7 @@ btnRegist.addEventListener("click", (e)=>{
 		return;
 	}
 	
-// 	frm.action = "regist_ok.jsp";
+// 	frm.action = "./regist.do";
 // 	frm.method = "post";
 	frm.submit();
 });
@@ -149,7 +149,7 @@ const btnList = document.getElementById("btnList");
 btnList.addEventListener("click", (e)=>{
 	e.preventDefault();
 	e.stopPropagation();
-	window.location.href="list.jsp";
+	window.location.href="./list.do";
 });
 
 

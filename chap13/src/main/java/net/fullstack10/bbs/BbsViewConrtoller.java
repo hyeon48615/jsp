@@ -3,7 +3,6 @@ package net.fullstack10.bbs;
 import java.io.IOException;
 import java.net.URLEncoder;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import jakarta.servlet.ServletException;
@@ -11,15 +10,15 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import net.fullstack10.common.BbsPage;
 import net.fullstack10.common.CommonDateUtil;
 import net.fullstack10.common.CommonUtil;
+import net.fullstack10.common.JSFunction;
 
 /**
- * Servlet implementation class BbsListController
+ * Servlet implementation class BbsViewConrtoller
  */
-@WebServlet("/bbs/list.do")
-public class BbsListController extends HttpServlet {
+@WebServlet("/bbs/view.do")
+public class BbsViewConrtoller extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	private CommonUtil cUtil = new CommonUtil();
@@ -30,8 +29,8 @@ public class BbsListController extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
-		int total_count = 0;
-		int total_page = 1;
+		//========================================================
+		//리스트에서 사용하는 파라미터 처리
 		String page_no = (req.getParameter("page_no") != null ? 
 				req.getParameter("page_no").trim() : "1");
 		String page_size = (req.getParameter("page_size") != null ? 
@@ -63,35 +62,33 @@ public class BbsListController extends HttpServlet {
 		pMap.put("page_size", page_size);
 		pMap.put("page_block_size", page_block_size);
 		pMap.put("page_skip_count", page_skip_count);
+		pMap.put("search_category", search_category);
+		pMap.put("search_word", search_word);
 
-		if ( search_category != null && !search_category.isEmpty()
-				&& search_word != null && !search_word.isEmpty()
-				) {
-			pMap.put("search_category", search_category);
-			pMap.put("search_word", search_word);
+		//String rtnParam = URLEncoder.encode(request.getRequestURI(), "UTF-8");
+		//리스트에서 사용하는 파라미터 처리
+		//========================================================
+
+		// 게시글 인덱스
+		String idx = req.getParameter("idx");
+		idx = (cUtil.parseInt(idx) > 0 ? idx : "0");
+		
+		if ( cUtil.parseInt(idx) < 1 ){
+			JSFunction.alertLocation(res, "replace", "접근 경로가 올바르지 않습니다", "./list.do?"+queryString); 
 		}
 		
-		total_count = dao.getBbsTotalCount(pMap);
-		List<BbsDTO> bbsList = dao.getBbsList(pMap);
+		pMap.put("idx", idx);
 
-		pMap.put("total_count", total_count);
-		pMap.put("bbsList", bbsList);
-		pMap.put("linkParams", URLEncoder.encode(queryString+"&page_no="+page_no, "UTF-8"));
+		BbsDTO dto = dao.getBbsView(cUtil.parseInt(idx));
+
+		pMap.put("dto", dto);
 
 		req.setAttribute("map", pMap);
 
-		pMap.put("paging", 
-				BbsPage.pagingArea(total_count, 
-					cUtil.parseInt(page_no), 
-					cUtil.parseInt(page_size), 
-					cUtil.parseInt(page_block_size), 
-					"./list.do?"+queryString)
-		);
-		
-		//dao.close();
-
-		req.getRequestDispatcher("/WEB-INF/views/bbs/list.jsp").forward(req, res);
+		req.getRequestDispatcher("/WEB-INF/views/bbs/view.jsp").forward(req, res);
 	}
+
+
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
@@ -100,5 +97,5 @@ public class BbsListController extends HttpServlet {
 		// TODO Auto-generated method stub
 		doGet(req, res);
 	}
-
+	
 }

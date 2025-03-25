@@ -1,12 +1,5 @@
-<%@page import="java.net.URLEncoder"%>
-<%@page import="net.fullstack10.common.CommonDateUtil"%>
-<%@page import="net.fullstack10.common.JSFunction"%>
-<%@page import="net.fullstack10.bbs.BbsDTO"%>
-<%@page import="net.fullstack10.bbs.BbsDAO"%>
-<%@page import="net.fullstack10.common.CommonUtil"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page trimDirectiveWhitespaces="true" %>
-<%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -51,12 +44,7 @@
 		height:40px;
 		margin:4px;
 	}
-	.img_area {
-		width:400px;
-	}
-	.view_img {
-		width:400px;
-	}	
+	
 </style>
 </head>
 <body>
@@ -64,47 +52,40 @@
 <%@ include file="/common/common_top.jsp" %>
 <%-- <jsp:include page="/common/common_top.jsp" /> --%>
 
-<h1>게시판 수정 페이지</h1>
+<h1>게시판 등록 페이지</h1>
 
-<form name="frmModify" id="frmModify" action="./modify.do?" method="post" enctype="multipart/form-data">
-<input type="hidden" name="idx" idx="idx" value="${map.idx}" />
+<form name="frmRegist" id="frmRegist" action="./regist.do" method="post" enctype="multipart/form-data">
 <table>
 <tbody>
 	<tr>
 		<th>작성자 : </th>
 		<td class="input_col">
 			<input type="text" class="input_box_id" name="member_id" id="member_id"
-				value="${map.dto.user_id}" maxlength="20" readonly />
+				value="<%=__SESSION_USER_ID %>" maxlength="20" />
 		</td> 
 	</tr>
 	<tr>
 		<th>제목 : </th>
 		<td class="input_col">
-			<input type="text" class="input_box" name="title" id="title" value="${map.dto.title}" maxlength="100" />
+			<input type="text" class="input_box" name="title" id="title" value="" maxlength="100" />
 		</td> 
 	</tr>
 	<tr>
 		<th>내용 : </th>
 		<td class="input_content_area">
-			<textarea name="content" id="content" class="input_content" rows="10" cols="60" wrap="hard">${map.dto.content}</textarea>		
+			<textarea name="content" id="content" class="input_content" rows="10" cols="60" wrap="hard"></textarea>		
 		</td> 
 	</tr>
 	<tr>
 		<th>첨부파일 : </th>
 		<td class="input_col">
-			<c:if test="${not empty map.dto.file_name}">
-			<img class="view_img" src="/chap14${map.dto.file_path}/${map.dto.file_name}" alt="${map.dto.file_name}" />
-			<input type="checkbox" name="prev_file_delete_flag" id="prev_file_delete_flag" value="Y" /> 삭제
-			<hr/>
-			</c:if>
-			<input type="file" name="file1" />	
+			<input type="file" name="files" multiple="multiple" />	
 		</td> 
 	</tr>
 	<tr>
 		<td colspan="2" class="align_cener btn_area">
-			<input type="submit" id="btnModify" value="글수정" />
+			<input type="submit" id="btnRegist" value="글등록" />
 			<input type="button" id="btnCancel" value="취소" />
-			<input type="button" id="btnDelete" value="삭제하기" />
 			<input type="button" id="btnList" value="목록으로" />
 		</td>
 	</tr>
@@ -114,23 +95,16 @@
 </form>
 
 <script>
-// 글 수정
-const btnModify = document.getElementById("btnModify");
-btnModify.addEventListener("click", (e)=>{
+// 회원 등록
+const btnRegist = document.getElementById("btnRegist");
+btnRegist.addEventListener("click", (e)=>{
 	e.preventDefault();
 	e.stopPropagation();
 	
-	const frm = document.querySelector("#frmModify");
-	const idx = frm.idx.value;
+	const frm = document.querySelector("#frmRegist");
 	const memberId = frm.member_id.value;
 	const title = frm.title.value;
 	const content = frm.content.value;
-
-	if (idx == "" || idx < 0){
-		alert("접근 경로가 올바르지 않습니다.");
-		window.location.replace("list.jsp");
-		return;
-	}
 
 	if (memberId.length < 4 || memberId.length > 20){
 		alert("아이디를 4자리 이상 20자리 이하로 입력하세요.");
@@ -147,26 +121,27 @@ btnModify.addEventListener("click", (e)=>{
 		frm.content.focus();
 		return;
 	}
-
- 	//frm.action = "./modify.do";
- 	//frm.method = "post";
+	
+// 	frm.action = "./regist.do";
+// 	frm.method = "post";
 	frm.submit();
 });
 
-//수정 취소
+//등록 취소
 const btnCancel = document.getElementById("btnCancel");
 btnCancel.addEventListener("click", (e)=>{
 	e.preventDefault();
 	e.stopPropagation();
 	
-});
+// 	const frm = document.querySelector("#frmRegist");
+// 	frm.member_id.value = "";
+// 	frm.title.value = "";
+// 	frm.content.value = "";
 
-//글 삭제
-const btnDelete = document.getElementById("btnDelete");
-btnDelete.addEventListener("click", (e)=>{
-	e.preventDefault();
-	e.stopPropagation();
-
+	const els = document.querySelectorAll("input[type='text'], textarea");
+	els.forEach((el)=>{
+		el.value="";
+	});
 });
 
 // 목록으로 이동

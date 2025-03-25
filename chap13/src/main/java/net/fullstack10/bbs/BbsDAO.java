@@ -35,13 +35,15 @@ public class BbsDAO extends DBConnPool {
 		int result = 0;
 		
 		StringBuilder sb = new StringBuilder();
-		sb.append("INSERT INTO tbl_bbs (");
-		sb.append("user_id, title, content, reg_date");
-		sb.append(", file_path, file_name, file_ext, file_size");
-		sb.append(") VALUES (");
-		sb.append("?, ?, ?, now()");
-		sb.append(", ?, ?, ?, 0");
-		sb.append(")");
+//		sb.append("INSERT INTO tbl_bbs(user_id, title, content, reg_date) ");
+//		sb.append("VALUES ( ?, ?, ?, now() ) ");
+		sb.append("INSERT INTO tbl_bbs( ");
+		sb.append(" user_id, title, content, reg_date ");
+		sb.append(" , file_path, file_name, file_ext, file_size ");
+		sb.append(" ) VALUES ( ");
+		sb.append(" ?, ?, ?, now() ");
+		sb.append(" , ?, ?, ?, 0 ");
+		sb.append(") ");
 		
 		try {
 			pstm = conn.prepareStatement(sb.toString());
@@ -144,7 +146,7 @@ public class BbsDAO extends DBConnPool {
 				dto.setFile_path(rs.getString("file_path"));
 				dto.setFile_name(rs.getString("file_name"));
 				dto.setFile_ext(rs.getString("file_ext"));
-				dto.setFile_size(rs.getInt("file_size"));
+				dto.setFile_size(rs.getLong("file_size"));
 				
 				list.add(dto);
 			}
@@ -199,7 +201,7 @@ public class BbsDAO extends DBConnPool {
 				dto.setFile_path(rs.getString("file_path"));
 				dto.setFile_name(rs.getString("file_name"));
 				dto.setFile_ext(rs.getString("file_ext"));
-				dto.setFile_size(rs.getInt("file_size"));
+				dto.setFile_size(rs.getLong("file_size"));
 			}
 			
 		} catch (Exception e) {
@@ -242,6 +244,80 @@ public class BbsDAO extends DBConnPool {
 			pstm.setString(1, dto.getTitle());
 			pstm.setString(2, dto.getContent());
 			pstm.setInt(3, dto.getIdx());
+			result = pstm.executeUpdate();
+		} catch(Exception e) {
+			System.out.println("게시물 수정 중 에러 발생 : "+ e.getMessage());
+			e.printStackTrace();
+		}
+		
+		return result;
+	}
+	
+	/**
+	 * @desc 게시판 글 수정
+	 * 
+	 * @param dto BbsDTO
+	 * @param idx int
+	 * @param member_id String
+	 * @param title String
+	 * @param content String
+	 * @return int
+	 * 
+	 * @example setBbsModify(BbsDTO)
+	 */
+	public int setBbsModify(BbsDTO dto, String prevFileDeleteFlag) {
+		//1. DB 연결
+		//2. 쿼리 구문 작성
+		//3. PreparedStatement 작성
+		//4. 쿼리 실행
+		//5. 리소스 해지
+
+		
+		int result = 0;
+		
+		StringBuilder sb = new StringBuilder();
+		sb.append("UPDATE tbl_bbs SET ");
+		sb.append(" title=?, content=? ");
+		
+		if ( dto.getFile_name() != null 
+				&& !dto.getFile_name().isEmpty() ) {
+			sb.append(", file_path=?, file_name=?, file_ext=?, file_size=? ");
+		} else {
+			if ( prevFileDeleteFlag.equals("Y") ) {
+				sb.append(", file_path=?, file_name=?, file_ext=?, file_size=? ");
+			}
+		}
+		
+		sb.append(" WHERE idx=? ");
+		
+		try {
+			pstm = conn.prepareStatement(sb.toString());
+			pstm.setString(1, dto.getTitle());
+			pstm.setString(2, dto.getContent());
+
+			if ( dto.getFile_name() != null 
+					&& !dto.getFile_name().isEmpty() ) {
+				pstm.setString(3, dto.getFile_path());
+				pstm.setString(4, dto.getFile_name());
+				pstm.setString(5, dto.getFile_ext());
+				pstm.setLong(6, dto.getFile_size());
+				pstm.setInt(7, dto.getIdx());
+			} else {
+				if ( prevFileDeleteFlag.equals("Y") ) {
+					pstm.setString(3, dto.getFile_path());
+					pstm.setString(4, dto.getFile_name());
+					pstm.setString(5, dto.getFile_ext());
+					pstm.setLong(6, dto.getFile_size());
+					pstm.setInt(7, dto.getIdx());
+				}
+			}
+
+			if ( ( dto.getFile_name() == null
+						|| dto.getFile_name().isEmpty() )
+				&& !prevFileDeleteFlag.equals("Y") ) {
+				pstm.setInt(3, dto.getIdx());
+			}
+
 			result = pstm.executeUpdate();
 		} catch(Exception e) {
 			System.out.println("게시물 수정 중 에러 발생 : "+ e.getMessage());

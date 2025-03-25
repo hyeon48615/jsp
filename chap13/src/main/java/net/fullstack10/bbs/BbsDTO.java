@@ -15,7 +15,7 @@ public class BbsDTO {
 	private String file_path;
 	private String file_name;
 	private String file_ext;
-	private int file_size;
+	private long file_size;
 
 	public int getIdx() {
 		return idx;
@@ -89,10 +89,10 @@ public class BbsDTO {
 	public void setFile_ext(String file_ext) {
 		this.file_ext = file_ext;
 	}
-	public int getFile_size() {
+	public long getFile_size() {
 		return file_size;
 	}
-	public void setFile_size(int file_size) {
+	public void setFile_size(long file_size) {
 		this.file_size = file_size;
 	}
 
