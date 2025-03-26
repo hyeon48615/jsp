@@ -116,7 +116,6 @@ public class CommonFileUtil {
 			arrFileName.add(orgFileName);
 		}
 		
-		
 		return arrFileName;
 	}
 }

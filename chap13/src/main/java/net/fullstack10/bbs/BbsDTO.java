@@ -1,6 +1,8 @@
 package net.fullstack10.bbs;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Map;
 
 public class BbsDTO {
 	private int idx;
@@ -16,6 +18,7 @@ public class BbsDTO {
 	private String file_name;
 	private String file_ext;
 	private long file_size;
+	private List<Map<String, String>> fileList;
 
 	public int getIdx() {
 		return idx;
@@ -95,6 +98,10 @@ public class BbsDTO {
 	public void setFile_size(long file_size) {
 		this.file_size = file_size;
 	}
-
-	
+	public List<Map<String, String>> getFileList() {
+		return fileList;
+	}
+	public void setFileList(List<Map<String, String>> fileList) {
+		this.fileList = fileList;
+	}
 }
